@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.aspect-square {
+    aspect-ratio: 1 / 1;
+}
+
+.inner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    width: 100%;
+    height: 100%;
+    /* transform: scaleY(-1); */
+}
+
+.inner-grid > div {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
