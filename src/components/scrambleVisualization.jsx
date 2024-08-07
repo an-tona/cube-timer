@@ -1,10 +1,10 @@
 import React from 'react';
 import '../index.css';
-import { Scramble } from './scrambleGenerator';
+import { useSelector } from 'react-redux';
 
 const colors = ['w', 'o', 'g', 'r', 'b', 'y'];
 
-const generateColorOrder = (scramble = "D2 F2 R2 L2 U2 R2 L2 U2 F' D' B R' F' L2 R U B2 U' L R' U B' F' R B") => {
+const generateColorOrder = (scramble = '') => {
     const cube = {
         faces: 'ULFRBD',
         moves: {
@@ -36,7 +36,11 @@ const generateColorOrder = (scramble = "D2 F2 R2 L2 U2 R2 L2 U2 F' D' B R' F' L2
         } 
     }
 
-    const scrambleArr = scramble.split(' ');
+    if(!scramble) {
+        return cube.state;
+    }
+
+    const scrambleArr = scramble.toUpperCase().split(' ');
     scrambleArr.forEach(move => {
         cube.state = cube.twist(cube.state, move);
     });
@@ -44,8 +48,27 @@ const generateColorOrder = (scramble = "D2 F2 R2 L2 U2 R2 L2 U2 F' D' B R' F' L2
     return cube.state;
 }
 
-const InnerGrid = ({ colorOrderForOneFace }) => {
-    const colorArr = colorOrderForOneFace.split('');
+// Конвертуємо порядок кольорів в зручний для HTML формат та додаємо центри
+const createCorrectColorOrder = (cubeState, colors) => { 
+    const faceColors = cubeState.match(/.{1,8}/g); 
+    const indexMapping = [6, 5, 4, 7, 3, 0, 1, 2, 8];
+
+    return faceColors.map((item, index) => {
+        const chars = item.split('');
+        const newChars = Array(chars.length);
+        indexMapping.forEach((newIndex, oldIndex) => {
+            newChars[oldIndex] = chars[newIndex];
+        });
+
+        const reorderedFace = newChars.join('');
+        const color = colors[index % colors.length];
+        return reorderedFace.slice(0, 4) + color + reorderedFace.slice(4);
+    });
+};
+
+
+const SingleFaceVisualization = ({ colorOrder }) => {
+    const colorArr = colorOrder.split('');
     const colorsCSS = [
         'bg-white',
         'bg-orange-500',
@@ -56,77 +79,50 @@ const InnerGrid = ({ colorOrderForOneFace }) => {
     ];
 
     return (
-        <div className="inner-grid">
+        <div className="face-visualization">
             {colorArr.map((color, index) => (
                 <div
                     key={index}
                     className={`inner-item ${colorsCSS[colors.indexOf(color)]}`}
                 >
-                    {/* Можна відобразити колір або індекс для налагодження */}
                 </div>
             ))}
         </div>
     );
 }
 
-const createCorrectColorOrder = (array) => {
-
-    const indexMapping = [6, 5, 4, 7, 3, 0, 1, 2, 8];
-    
-    return array.map(item => {
-        const chars = item.split('');
-        const newChars = Array(chars.length);
-        indexMapping.forEach((newIndex, oldIndex) => {
-            newChars[oldIndex] = chars[newIndex];
-        });
-        return newChars.join('');
-    });
-};
-
-
-
 
 export const ScrambleVisualization = () => {
+    const scramble = useSelector(state => state.stopwatch.solve.scramble);
 
-    const cubeState = generateColorOrder();
-    const faceColors = cubeState.match(/.{1,8}/g);
-
-    const colorOrderWithoutCenters = createCorrectColorOrder(faceColors);
-
-    const finalColorOrder = colorOrderWithoutCenters.map((order, index) => {
-        const color = colors[index % colors.length];
-        return order.slice(0, 4) + color + order.slice(4);
-    });
-    console.log('finalColorOrder',finalColorOrder);
-    console.log('test', createCorrectColorOrder(['012345678']));
-
-
+    const cubeState = generateColorOrder(scramble);
+    const finalColorOrder = createCorrectColorOrder(cubeState, colors);
 
   return (
 
     <div className="grid grid-cols-4 gap-4 p-4">
         <div className="col-start-2 aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[0]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[0]}/>
         </div>
         <div></div>
         <div></div>
 
         <div className="aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[1]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[1]}/>
         </div>
         <div className="aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[2]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[2]}/>
         </div>
         <div className="aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[3]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[3]}/>
         </div>
         <div className="aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[4]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[4]}/>
         </div>
 
         <div></div>
         <div className="col-start-2 aspect-square">
-            <InnerGrid colorOrderForOneFace={finalColorOrder[5]}/>
+            <SingleFaceVisualization colorOrder={finalColorOrder[5]}/>
         </div>
         <div></div>
         <div></div>

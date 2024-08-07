@@ -1,7 +1,4 @@
-import React from 'react';
-
-
-function scrambleGenerator() {
+export default function scrambleGenerator(reqScrambleLen = 25) {
 	const cube = {
 		faces: "DLBURF",
 		scramble: function (reqScrambleLen) {
@@ -24,20 +21,5 @@ function scrambleGenerator() {
 			return moves.join(' ');
 		}
 	};
-	return cube;
-}
-
-
-
-export const Scramble = () => {
-
-	const cube = scrambleGenerator();
-	const scramble = cube.scramble(25);
-
-  return (
-    <div>
-		{scramble}
-		{console.log(cube)}
-	</div>
-  )
+	return cube.scramble(reqScrambleLen);
 }

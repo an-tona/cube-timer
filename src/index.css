@@ -6,17 +6,16 @@
     aspect-ratio: 1 / 1;
 }
 
-.inner-grid {
+.face-visualization {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 2px;
     width: 100%;
     height: 100%;
-    /* transform: scaleY(-1); */
 }
 
-.inner-grid > div {
+.face-visualization > div {
     border: 1px solid #ccc;
     border-radius: 10px;
 }
