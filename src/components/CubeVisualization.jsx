@@ -92,7 +92,7 @@ const SingleFaceVisualization = ({ colorOrder }) => {
 }
 
 
-export const CubeVisualization = () => {
+export const CubeVisualization = () => { //пізніше потрібно буде передавати scramble як параметр
     const scramble = useSelector(state => state.stopwatch.solve.scramble);
 
     const cubeState = generateColorOrder(scramble);

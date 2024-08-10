@@ -1,14 +1,16 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import localStorageReducer from '../localStorageReducer';
+
 
 
 const stopwatchSlice = createSlice({
     name: 'stopwatch',
     initialState: {
-        time: 0,
+        time: 0, //в мілісекундах
         isRunning: false,
         solve: {
             solveTime: 0,
-            scramble: "U2 F2 R2 U' L2 D B R' B R' B R' D' L2 U'",
+            scramble: "",
             // solveDate: '',
             // event: '',
             // isPlus2: false,
@@ -28,21 +30,54 @@ const stopwatchSlice = createSlice({
             state.time = 0;
             state.isRunning = false;
         },
-        tick() {},
-        setScramble(state, action) {
-            const {scramble} = action.payload;
+        tick(state) {
+            state.time += 10;
+        },
+        setScramble(state, { payload }) {
+            const { scramble } = payload;
             state.solve.scramble = scramble;
         },
-    }
+        saveSolve(state, { payload }) {
+            state.solve.solveTime = state.time;
+            state.solve.scramble = payload.scramble;
+        
+            // Пушимо в solveHistory поточний стан solve
+            state.solveHistory.push({ ...state.solve });
+        
+            // Очищуємо solve для наступного використання
+            // state.solve = {
+            //     solveTime: 0,
+            //     scramble: "",
+            //     інші поля можна ініціалізувати за необхідності
+            // };
+        },
+        resetSolveHistory(state) {
+            state.solveHistory = [];
+        }
+    } 
 });
 
 const store = configureStore({
     reducer: {
-        [stopwatchSlice.name]: stopwatchSlice.reducer,
+        [stopwatchSlice.name]: localStorageReducer(stopwatchSlice.reducer, 'stopwatch'),
     },
   });
 
-store.subscribe(() => console.log('store', store.getState()));
+
+
+//console log for dev
+let prevState = store.getState();
+store.subscribe(() => {
+    const currentState = store.getState();
+    if (
+        currentState.stopwatch.isRunning !== prevState.stopwatch.isRunning ||
+        currentState.stopwatch.solve !== prevState.stopwatch.solve ||
+        currentState.stopwatch.solveHistory !== prevState.stopwatch.solveHistory
+    ) {
+        console.log('store changed', currentState);
+    }
+    prevState = currentState;
+});
 
 export { stopwatchSlice }
 
