@@ -2,7 +2,7 @@ import './App.css';
 import { Provider, useDispatch } from 'react-redux';
 import { CubeVisualization } from './components/CubeVisualization.jsx';
 import store from './components/slices/slices.jsx';
-import Stopwatch from './components/slices/Stopwatch.jsx';
+import Stopwatch from './components/Stopwatch.jsx';
 
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
       <Provider store={store}>
       <Stopwatch />
       <div className='w-96'>
-        <CubeVisualization />
+        {/* <CubeVisualization /> */}
       </div>
       
       </Provider>

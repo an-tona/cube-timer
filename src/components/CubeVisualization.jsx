@@ -1,6 +1,5 @@
 import React from 'react';
 import '../index.css';
-import { useSelector } from 'react-redux';
 
 const colors = ['w', 'o', 'g', 'r', 'b', 'y'];
 
@@ -39,7 +38,6 @@ const generateColorOrder = (scramble = '') => {
     if(!scramble) {
         return cube.state;
     }
-
     const scrambleArr = scramble.toUpperCase().split(' ');
     scrambleArr.forEach(move => {
         cube.state = cube.twist(cube.state, move);
@@ -92,14 +90,12 @@ const SingleFaceVisualization = ({ colorOrder }) => {
 }
 
 
-export const CubeVisualization = () => { //пізніше потрібно буде передавати scramble як параметр
-    const scramble = useSelector(state => state.stopwatch.solve.scramble);
+export const CubeVisualization = ({scramble = ''}) => {
 
     const cubeState = generateColorOrder(scramble);
     const finalColorOrder = createCorrectColorOrder(cubeState, colors);
 
   return (
-
     <div className="grid grid-cols-4 gap-4 p-4">
         <div className="col-start-2 aspect-square">
             <SingleFaceVisualization colorOrder={finalColorOrder[0]}/>
