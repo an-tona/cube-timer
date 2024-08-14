@@ -16,6 +16,9 @@
 }
 
 .face-visualization > div {
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius: 20%;
+}
+body {
+    background-color: gray; /* Встановлюємо колір фону */
 }

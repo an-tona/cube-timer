@@ -1,6 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import localStorageReducer from '../localStorageReducer';
-
+import localStorageReducer from '../functions/localStorageReducer';
 
 
 const stopwatchSlice = createSlice({
@@ -40,16 +39,7 @@ const stopwatchSlice = createSlice({
         saveSolve(state, { payload }) {
             state.solve.solveTime = state.time;
             state.solve.scramble = payload.scramble;
-        
-            // Пушимо в solveHistory поточний стан solve
             state.solveHistory.push({ ...state.solve });
-        
-            // Очищуємо solve для наступного використання
-            // state.solve = {
-            //     solveTime: 0,
-            //     scramble: "",
-            //     інші поля можна ініціалізувати за необхідності
-            // };
         },
         resetSolveHistory(state) {
             state.solveHistory = [];

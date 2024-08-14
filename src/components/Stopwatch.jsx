@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { stopwatchSlice } from "./slices/slices.jsx";
-import scrambleGenerator from "./scrambleGenerator.jsx";
-import { actionFullStopStopwatch } from "./slices/actions.jsx";
+import scrambleGenerator from "./functions/scrambleGenerator.jsx";
 import { CubeVisualization } from "./CubeVisualization.jsx";
 
 
@@ -40,18 +39,19 @@ function Stopwatch() {
             if (event.code === "Space") {
                 event.preventDefault();
     
-                // Якщо секундомір працює
+                // Зупинка секундоміру
                 if (state.isRunning) {
                     dispatch(stopwatchSlice.actions.stop());
     
                     const newScramble = scrambleGenerator();
                     setScramble(newScramble);
+
                     dispatch(stopwatchSlice.actions.setScramble({ scramble: newScramble }));
                     dispatch(stopwatchSlice.actions.saveSolve({ scramble: scramble }));
                     setTimeColor("black");
                     setIsReady(false);
     
-                } else if (!isReady) {  // Додаємо цю перевірку
+                } else if (!isReady) {
                     // Якщо не працює, змінюємо колір на червоний
                     setTimeColor("red");
     
