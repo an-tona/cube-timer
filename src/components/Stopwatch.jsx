@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { stopwatchSlice } from "./slices/slices.jsx";
 import scrambleGenerator from "./functions/scrambleGenerator.jsx";
 import { CubeVisualization } from "./CubeVisualization.jsx";
-
-
+import formatTime from "./functions/formatTime.jsx";
+import CopyScramble from './CopyScramble.jsx';
 
 function Stopwatch() {
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ function Stopwatch() {
             if (event.code === "Space") {
                 event.preventDefault();
     
-                // Зупинка секундоміру
+                // Зупинка секундоміру і збереження спроби
                 if (state.isRunning) {
                     dispatch(stopwatchSlice.actions.stop());
     
@@ -59,7 +59,7 @@ function Stopwatch() {
                     pressTimeout = setTimeout(() => {
                         setTimeColor("green");
                         setIsReady(true);
-                    }, 300);
+                    }, 150);
                 }
             }
         };
@@ -89,12 +89,19 @@ function Stopwatch() {
         };
     }, [state.isRunning, isReady, dispatch]);
 
+
     return (
-        <>
-            <div>{scramble}</div>
-            <h1 style={{ color: timeColor }}>{(state.time / 1000).toFixed(2)}</h1>
-            <CubeVisualization scramble={scramble}/>
-        </>
+        <article className="flex flex-col items-center">
+            <div className="flex gap-4">
+                <p>{scramble}</p>
+                <CopyScramble scramble={scramble}/>
+            </div>
+            
+            <h1 style={{ color: timeColor }}>{formatTime(state.time)}</h1>
+            <p>+2 | DNF</p>
+
+            {/* <CubeVisualization scramble={scramble}/> */}
+        </article>
     );
 }
 

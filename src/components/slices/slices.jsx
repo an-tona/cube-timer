@@ -10,7 +10,7 @@ const stopwatchSlice = createSlice({
         solve: {
             solveTime: 0,
             scramble: "",
-            // solveDate: '',
+            solveDate: '',
             // event: '',
             // isPlus2: false,
             // isDNF: false,
@@ -40,6 +40,9 @@ const stopwatchSlice = createSlice({
             state.solve.solveTime = state.time;
             state.solve.scramble = payload.scramble;
             state.solveHistory.push({ ...state.solve });
+
+            const solveDate = new Date().toISOString();
+            state.solve.solveDate = solveDate;
         },
         resetSolveHistory(state) {
             state.solveHistory = [];

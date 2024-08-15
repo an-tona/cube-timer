@@ -23,6 +23,7 @@ export default {
           500: '#ffff00',
         },
         white: '#ffffff',
+        black: '#000000'
       },
     },
   },

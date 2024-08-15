@@ -22,3 +22,13 @@
 body {
     background-color: gray; /* Встановлюємо колір фону */
 }
+p {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 400;
+    font-size: 19px;
+}
+h1 {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 400;
+    font-size: 90px;
+}
