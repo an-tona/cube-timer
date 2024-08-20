@@ -4,21 +4,22 @@ import { CubeVisualization } from './components/CubeVisualization.jsx';
 import store from './components/slices/slices.jsx';
 import Stopwatch from './components/Stopwatch.jsx';
 import ResetBtnTest from './components/ResetBtnTest.jsx';
-import Statistics from './components/Statistics.jsx';
-import SolveHistory from './components/SolveHistory.jsx';
+import SolvesInfoContainer from './components/SolvesInfoContainer.jsx';
+
 
 
 
 const App = () => {
 
   return (
-    <div>
+    <div className='flex flex-col min-h-screen'>
       <Provider store={store}>
-      <Stopwatch />
-        {/* <CubeVisualization /> */}
-      <ResetBtnTest />
-      <Statistics />
-      <SolveHistory />
+        <div className='h-10'></div>
+        <div className='flex-grow'>
+          <Stopwatch />
+        </div>
+        <ResetBtnTest />
+        <SolvesInfoContainer />
       </Provider>
     </div>
   )

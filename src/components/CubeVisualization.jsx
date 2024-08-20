@@ -96,32 +96,34 @@ export const CubeVisualization = ({scramble = ''}) => {
     const finalColorOrder = createCorrectColorOrder(cubeState, colors);
 
   return (
-    <div className="grid grid-cols-4 gap-4 p-4">
-        <div className="col-start-2 aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[0]}/>
-        </div>
-        <div></div>
-        <div></div>
+    <div class="bg-blue-100 p-6 rounded-md max-w-full h-full">
+        <div className="grid grid-cols-4 gap-4 p-4">
+            <div className="col-start-2 aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[0]}/>
+            </div>
+            <div></div>
+            <div></div>
 
-        <div className="aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[1]}/>
-        </div>
-        <div className="aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[2]}/>
-        </div>
-        <div className="aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[3]}/>
-        </div>
-        <div className="aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[4]}/>
-        </div>
+            <div className="aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[1]}/>
+            </div>
+            <div className="aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[2]}/>
+            </div>
+            <div className="aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[3]}/>
+            </div>
+            <div className="aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[4]}/>
+            </div>
 
-        <div></div>
-        <div className="col-start-2 aspect-square">
-            <SingleFaceVisualization colorOrder={finalColorOrder[5]}/>
+            <div></div>
+            <div className="col-start-2 aspect-square">
+                <SingleFaceVisualization colorOrder={finalColorOrder[5]}/>
+            </div>
+            <div></div>
+            <div></div>
         </div>
-        <div></div>
-        <div></div>
     </div>
   )
 }

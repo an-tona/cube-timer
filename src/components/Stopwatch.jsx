@@ -19,6 +19,11 @@ function Stopwatch() {
         dispatch(stopwatchSlice.actions.reset());
     }, [dispatch]);
 
+    useEffect(() => {
+        // Sync the local scramble with Redux state whenever it changes
+        dispatch(stopwatchSlice.actions.setCurrentScramble({ scramble }));
+    }, [scramble, dispatch]);
+
     //сам секундомір
     useEffect(() => {
         if (!state.isRunning) {
@@ -93,7 +98,7 @@ function Stopwatch() {
     return (
         <article className="flex flex-col items-center">
             <div className="flex gap-4">
-                <p>{scramble}</p>
+                <p className="scramble">{scramble}</p>
                 <CopyScramble scramble={scramble}/>
             </div>
             

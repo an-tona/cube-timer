@@ -7,9 +7,10 @@ const stopwatchSlice = createSlice({
     initialState: {
         time: 0, //в мілісекундах
         isRunning: false,
+        currentScramble: '',
         solve: {
             solveTime: 0,
-            scramble: "",
+            scramble: '',
             solveDate: '',
             // event: '',
             // isPlus2: false,
@@ -31,6 +32,10 @@ const stopwatchSlice = createSlice({
         },
         tick(state) {
             state.time += 10;
+        },
+        setCurrentScramble(state, { payload }) {
+            const { scramble } = payload;
+            state.currentScramble = scramble;
         },
         setScramble(state, { payload }) {
             const { scramble } = payload;

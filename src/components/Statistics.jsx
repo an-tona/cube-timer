@@ -64,14 +64,35 @@ function Statistics() {
         }
     }, [solveHistory]);
 
+    //pb, mean, ao5, ao12, ao5 pb, ao12 pb 
     return (
-        <div>
-            <p>pb: {bestSolve !== null ? bestSolve : "N/A"}</p>
-            <p>ao5: {avg5Current !== null ? avg5Current : "N/A"}</p>
-            <p>ao12: {avg12Current !== null ? avg12Current : "N/A"}</p>
-            <p>ao5 pb: {avg5Best !== null ? avg5Best : "N/A"}</p>
-            <p>ao12 pb: {avg12Best !== null ? avg12Best : "N/A"}</p>
-            <p>avg: {mean !== null ? mean : "N/A"}</p>
+        <div className="bg-blue-100 p-6 rounded-md max-w-md h-full">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col justify-center items-center">
+                    <p>pb</p>
+                    <p class="font-bold">{bestSolve !== null ? bestSolve : "N/A"}</p>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <p>ao5</p>
+                    <p class="font-bold">{avg5Current !== null ? avg5Current : "N/A"}</p>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <p>ao12</p>
+                    <p class="font-bold">{avg12Current !== null ? avg12Current : "N/A"}</p>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <p>ao5 pb</p>
+                    <p class="font-bold">{avg5Best !== null ? avg5Best : "N/A"}</p>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <p>ao12 pb</p>
+                    <p class="font-bold">{avg12Best !== null ? avg12Best : "N/A"}</p>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <p>avg</p>
+                    <p class="font-bold">{mean !== null ? mean : "N/A"}</p>
+                </div>
+            </div>
         </div>
     );
 }

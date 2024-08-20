@@ -19,14 +19,17 @@
     /* border: 1px solid #ccc; */
     border-radius: 20%;
 }
-body {
-    background-color: gray; /* Встановлюємо колір фону */
-}
-p {
+
+/* body {
+    background-color: gray;
+} */
+
+.scramble {
     font-family: 'Source Code Pro', monospace;
     font-weight: 400;
     font-size: 19px;
 }
+
 h1 {
     font-family: 'Source Code Pro', monospace;
     font-weight: 400;

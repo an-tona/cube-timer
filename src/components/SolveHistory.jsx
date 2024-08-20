@@ -6,15 +6,15 @@ function SolveHistory() {
     const solveHistory = useSelector(state => state.stopwatch.solveHistory);
 
     return (
-        <div>
-            <h2>Solve History</h2>
-            <ul>
+        <div className="bg-blue-100 p-6 rounded-md max-w-full h-full flex flex-col">
+            <div className="flex-1 overflow-y-auto">
                 {solveHistory.map((solve, index) => (
-                    <li key={index}>
+                    <span key={index} className="text-sm">
                         {formatTime(solve.solveTime)}
-                    </li>
+                        {index < solveHistory.length - 1 && ", "}
+                    </span>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }
