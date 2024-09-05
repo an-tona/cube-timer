@@ -96,8 +96,8 @@ export const CubeVisualization = ({scramble = ''}) => {
     const finalColorOrder = createCorrectColorOrder(cubeState, colors);
 
   return (
-    <div class="bg-blue-100 p-6 rounded-md max-w-full h-full">
-        <div className="grid grid-cols-4 gap-4 p-4">
+    <div className='w-full max-w-full'>
+        <div className="grid grid-cols-4 gap-4">
             <div className="col-start-2 aspect-square">
                 <SingleFaceVisualization colorOrder={finalColorOrder[0]}/>
             </div>

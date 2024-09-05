@@ -42,6 +42,7 @@ const stopwatchSlice = createSlice({
             state.solve.scramble = scramble;
         },
         saveSolve(state, { payload }) {
+            console.log('test')
             state.solve.solveTime = state.time;
             state.solve.scramble = payload.scramble;
             state.solveHistory.push({ ...state.solve });

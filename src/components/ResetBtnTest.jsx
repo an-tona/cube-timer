@@ -10,6 +10,11 @@ export default function ResetBtnTest() {
   }
 
   return (
-    <button onClick={handleResetClick}>Reset Solve History</button>
+    <button 
+      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+      onClick={handleResetClick}
+     >
+      Reset Solve History
+      </button>
   );
 }

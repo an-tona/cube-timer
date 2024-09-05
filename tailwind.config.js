@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'source-code-pro': ['"Source Code Pro"', 'monospace'],
+      },
       colors: {
         orange: {
           500: '#f97316',
