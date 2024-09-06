@@ -42,13 +42,16 @@ const stopwatchSlice = createSlice({
             state.solve.scramble = scramble;
         },
         saveSolve(state, { payload }) {
-            console.log('test')
             state.solve.solveTime = state.time;
             state.solve.scramble = payload.scramble;
-            state.solveHistory.push({ ...state.solve });
+            state.solveHistory.unshift({ ...state.solve });
 
             const solveDate = new Date().toISOString();
             state.solve.solveDate = solveDate;
+        },
+        deleteSolve(state, { payload }) {
+            console.log(payload)
+            state.solveHistory = state.solveHistory.filter((_, index) => index !== payload.index);
         },
         resetSolveHistory(state) {
             state.solveHistory = [];

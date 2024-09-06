@@ -16,7 +16,7 @@ const App = () => {
           <Stopwatch />
         </div>
         <div className='mt-auto'>
-          <ResetBtnTest />
+          {/* <ResetBtnTest /> */}
           <NumberInputForm />
         </div>
         <div>

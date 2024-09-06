@@ -16,10 +16,15 @@ function NumberInputForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        for(let i = 0; i <= number; i++) {
+        for(let i = 0; i < number; i++) {
             dispatch(stopwatchSlice.actions.saveSolve({scramble: null}));
         }
     };
+    const handleResetClick = (e) => {
+        e.preventDefault();
+
+        dispatch(stopwatchSlice.actions.resetSolveHistory());
+      }
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 p-4">
@@ -38,6 +43,12 @@ function NumberInputForm() {
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
             >
                 Submit
+            </button>
+            <button 
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                onClick={handleResetClick}
+                >
+                Reset
             </button>
         </form>
     );
