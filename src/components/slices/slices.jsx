@@ -13,8 +13,8 @@ const stopwatchSlice = createSlice({
             scramble: '',
             solveDate: '',
             // event: '',
-            // isPlus2: false,
-            // isDNF: false,
+            isPlus2: false,
+            isDNF: false,
             // notes: ''
         },
         solveHistory: [],
@@ -41,6 +41,24 @@ const stopwatchSlice = createSlice({
             const { scramble } = payload;
             state.solve.scramble = scramble;
         },
+        togglePlus2(state, { payload }) {
+            const { index } = payload;
+            const currentSolve = state.solveHistory[index];
+      
+            currentSolve.isPlus2 = !currentSolve.isPlus2;
+            if (currentSolve.isPlus2) {
+              currentSolve.isDNF = false;
+            }
+          },
+          toggleDNF(state, { payload }) {
+            const { index } = payload;
+            const currentSolve = state.solveHistory[index];
+      
+            currentSolve.isDNF = !currentSolve.isDNF;
+            if (currentSolve.isDNF) {
+              currentSolve.isPlus2 = false;
+            }
+          },
         saveSolve(state, { payload }) {
             state.solve.solveTime = state.time;
             state.solve.scramble = payload.scramble;
@@ -50,7 +68,6 @@ const stopwatchSlice = createSlice({
             state.solve.solveDate = solveDate;
         },
         deleteSolve(state, { payload }) {
-            console.log(payload)
             state.solveHistory = state.solveHistory.filter((_, index) => index !== payload.index);
         },
         resetSolveHistory(state) {

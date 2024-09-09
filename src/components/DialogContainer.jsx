@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 const style = { //for the pop up
   position: 'absolute',
@@ -18,18 +17,13 @@ const style = { //for the pop up
   p: 4,
 };
 
-export default function TransitionsModal({ buttonText, children }) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+export default function TransitionsModal({ buttonText, children, open, handleOpen, handleClose }) {
   return (
     <div className='w-12'>
-      <Button onClick={handleOpen}
-      sx={{ padding: '2px 2px', fontSize: '0.90rem', color:'black' }}
-
-      style={{ minWidth: '4px', width: '2.5rem', height: '2rem'}}
-
+      <Button 
+        onClick={handleOpen}
+        sx={{ padding: '2px 2px', fontSize: '0.90rem', color:'black' }}
+        style={{ minWidth: '4px', width: '2.5rem', height: '2rem'}}
       >
         {buttonText}
       </Button>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { stopwatchSlice } from "./slices/slices.jsx";
 import scrambleGenerator from "./functions/scrambleGenerator.jsx";
-import { CubeVisualization } from "./CubeVisualization.jsx";
 import formatTime from "./functions/formatTime.jsx";
 import CopyScramble from './CopyScramble.jsx';
 
@@ -20,9 +19,20 @@ function Stopwatch() {
     }, [dispatch]);
 
     useEffect(() => {
-        // Sync the local scramble with Redux state whenever it changes
         dispatch(stopwatchSlice.actions.setCurrentScramble({ scramble }));
     }, [scramble, dispatch]);
+
+
+    //штрафи
+    const handlePlus2Click = () => {
+        dispatch(stopwatchSlice.actions.togglePlus2({ index : 0 }));
+    }
+
+    const handleDNFClick = () => {
+        dispatch(stopwatchSlice.actions.toggleDNF({ index : 0 }));
+    }
+
+    const latestSolve = state.solveHistory[0];
 
     //сам секундомір
     useEffect(() => {
@@ -103,9 +113,21 @@ function Stopwatch() {
             </div>
             
             <h1 style={{ color: timeColor }}>{formatTime(state.time)}</h1>
-            <p>+2 | DNF</p>
-
-            {/* <CubeVisualization scramble={scramble}/> */}
+            <div>
+                <span className="cursor-pointer"
+                onClick={handlePlus2Click}
+                style={{ color: latestSolve.isPlus2 ? 'red' : 'black', transition: '200ms' }}
+                >
+                    +2
+                </span>
+                <span> | </span>
+                <span className="cursor-pointer"
+                onClick={handleDNFClick}
+                style={{ color: latestSolve.isDNF ? 'red' : 'black', transition: '200ms' }}
+                >
+                    DNF
+                </span>
+            </div>
         </article>
     );
 }
