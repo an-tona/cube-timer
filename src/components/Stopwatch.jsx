@@ -116,14 +116,14 @@ function Stopwatch() {
             <div>
                 <span className="cursor-pointer"
                 onClick={handlePlus2Click}
-                style={{ color: latestSolve.isPlus2 ? 'red' : 'black', transition: '200ms' }}
+                style={{ color: latestSolve?.isPlus2 ? 'red' : 'black', transition: '200ms' }}
                 >
                     +2
                 </span>
                 <span> | </span>
                 <span className="cursor-pointer"
                 onClick={handleDNFClick}
-                style={{ color: latestSolve.isDNF ? 'red' : 'black', transition: '200ms' }}
+                style={{ color: latestSolve?.isDNF ? 'red' : 'black', transition: '200ms' }}
                 >
                     DNF
                 </span>
