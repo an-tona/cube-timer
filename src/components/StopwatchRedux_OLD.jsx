@@ -1,3 +1,4 @@
+//секундомір переписаний з редаксу на локальний стан
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { stopwatchSlice } from "./slices/slices.jsx";
@@ -7,66 +8,70 @@ import CopyScramble from './CopyScramble.jsx';
 
 function Stopwatch() {
     const dispatch = useDispatch();
-    const solveHistory = useSelector(state => state.stopwatch.solveHistory);
+    const state = useSelector(state => state.stopwatch);
     const [scramble, setScramble] = useState(scrambleGenerator());
 
-    const [time, setTime] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
     const [timeColor, setTimeColor] = useState("black");
     const [isReady, setIsReady] = useState(false);
 
-    useEffect(() => {
-        setScramble(scrambleGenerator());
-    }, []);
 
-    // сам секундомір
     useEffect(() => {
-        if (!isRunning) return;
+        dispatch(stopwatchSlice.actions.reset());
+    }, [dispatch]);
 
+    useEffect(() => {
+        dispatch(stopwatchSlice.actions.setCurrentScramble({ scramble }));
+    }, [scramble, dispatch]);
+
+
+    //штрафи
+    const handlePlus2Click = () => {
+        dispatch(stopwatchSlice.actions.togglePlus2({ index : 0 }));
+    }
+
+    const handleDNFClick = () => {
+        dispatch(stopwatchSlice.actions.toggleDNF({ index : 0 }));
+    }
+
+    const latestSolve = state.solveHistory[0];
+
+    //сам секундомір
+    useEffect(() => {
+        if (!state.isRunning) {
+            return;
+        }
         const intervalId = setInterval(() => {
-            setTime((prevTime) => prevTime + 10);
+            dispatch(stopwatchSlice.actions.tick());
         }, 10);
 
         return () => clearInterval(intervalId);
-    }, [isRunning]);
-
-    const saveSolve = (solveTime) => {
-        dispatch(stopwatchSlice.actions.saveSolve({ scramble, solveTime }));
-    };
-
-    const handlePlus2Click = () => {
-        if (solveHistory.length > 0) {
-            dispatch(stopwatchSlice.actions.togglePlus2({ index: 0 }));
-        }
-    };
-
-    const handleDNFClick = () => {
-        if (solveHistory.length > 0) {
-            dispatch(stopwatchSlice.actions.toggleDNF({ index: 0 }));
-        }
-    };
-
-    const latestSolve = solveHistory[0];
+    }, [state.isRunning, dispatch]);
 
     //space
     useEffect(() => {
         let pressTimeout;
-
+    
         const handleKeyDown = (event) => {
             if (event.code === "Space") {
                 event.preventDefault();
+    
+                // Зупинка секундоміру і збереження спроби
+                if (state.isRunning) {
+                    dispatch(stopwatchSlice.actions.stop());
+    
+                    const newScramble = scrambleGenerator();
+                    setScramble(newScramble);
 
-                if (isRunning) {
-                    // Зупинити секундомір і зберегти спробу
-                    setIsRunning(false);
-                    saveSolve(time);
-                    
-                    setScramble(scrambleGenerator());
+                    dispatch(stopwatchSlice.actions.setScramble({ scramble: newScramble }));
+                    dispatch(stopwatchSlice.actions.saveSolve({ scramble: scramble }));
                     setTimeColor("black");
                     setIsReady(false);
+    
                 } else if (!isReady) {
+                    // Якщо не працює, змінюємо колір на червоний
                     setTimeColor("red");
-
+    
+                    // Таймер для зміни кольору на зелений через 0.3 секунди
                     pressTimeout = setTimeout(() => {
                         setTimeColor("green");
                         setIsReady(true);
@@ -74,30 +79,32 @@ function Stopwatch() {
                 }
             }
         };
-
+    
         const handleKeyUp = (event) => {
-            if (event.code === "Space" && !isRunning) {
+            if (event.code === "Space" && !state.isRunning) {
+                // Якщо пройшло 0.3 секунди, запускаємо секундомір
                 if (isReady) {
-                    // Запустити секундомір
-                    setIsRunning(true);
-                    setTime(0);
+                    dispatch(stopwatchSlice.actions.reset());
+                    dispatch(stopwatchSlice.actions.start());
                 }
-
+    
+                // Скидаємо колір тексту на чорний
                 setTimeColor("black");
                 clearTimeout(pressTimeout);
                 setIsReady(false);
             }
         };
-
+    
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("keyup", handleKeyUp);
-
+    
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
             clearTimeout(pressTimeout);
         };
-    }, [isRunning, isReady, time]);
+    }, [state.isRunning, isReady, dispatch]);
+
 
     return (
         <article className="flex flex-col items-center">
@@ -105,8 +112,8 @@ function Stopwatch() {
                 <p className="scramble">{scramble}</p>
                 <CopyScramble scramble={scramble}/>
             </div>
-
-            <h1 style={{ color: timeColor }}>{formatTime(time)}</h1>
+            
+            <h1 style={{ color: timeColor }}>{formatTime(state.time)}</h1>
             <div>
                 <span className="cursor-pointer"
                 onClick={handlePlus2Click}

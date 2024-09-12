@@ -20,19 +20,22 @@ const stopwatchSlice = createSlice({
         solveHistory: [],
     },
     reducers: {
-        start(state) {
-            state.isRunning = true;
-        },
-        stop(state) {
-            state.isRunning = false;
-        },
-        reset(state) {
-            state.time = 0;
-            state.isRunning = false;
-        },
-        tick(state) {
-            state.time += 10;
-        },
+        //редюсери секундоміру винесено в локальний стан
+
+        // start(state) {
+        //     state.isRunning = true;
+        // },
+        // stop(state) {
+        //     state.isRunning = false;
+        // },
+        // reset(state) {
+        //     state.time = 0;
+        //     state.isRunning = false;
+        // },
+        // tick(state) {
+        //     state.time += 10;
+        // },
+
         setCurrentScramble(state, { payload }) {
             const { scramble } = payload;
             state.currentScramble = scramble;
@@ -49,8 +52,8 @@ const stopwatchSlice = createSlice({
             if (currentSolve.isPlus2) {
               currentSolve.isDNF = false;
             }
-          },
-          toggleDNF(state, { payload }) {
+        },
+        toggleDNF(state, { payload }) {
             const { index } = payload;
             const currentSolve = state.solveHistory[index];
       
@@ -58,9 +61,9 @@ const stopwatchSlice = createSlice({
             if (currentSolve.isDNF) {
               currentSolve.isPlus2 = false;
             }
-          },
+        },
         saveSolve(state, { payload }) {
-            state.solve.solveTime = state.time;
+            state.solve.solveTime = payload.solveTime;
             state.solve.scramble = payload.scramble;
             state.solveHistory.unshift({ ...state.solve });
 

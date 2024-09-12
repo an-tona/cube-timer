@@ -1,14 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import formatTime from './functions/formatTime';
+// formatTime
 
 function Statistics() {
     const solveHistory = useSelector(state => state.stopwatch.solveHistory);
     const [bestSolve, setBestSolve] = useState(null);
     const [avg5Current, setAvg5Current] = useState(null);
     const [avg12Current, setAvg12Current] = useState(null);
-    const [best5, setBest5] = useState(null);  // Renamed from avg5Best
-    const [best12, setBest12] = useState(null);  // Renamed from avg12Best
+    const [best5, setBest5] = useState(null);
+    const [best12, setBest12] = useState(null);
     const [mean, setMean] = useState(null);
+
+    const getTimeWithPenalties = (solve) => {
+        if (solve.isDNF) return Infinity;
+        if (solve.isPlus2) return solve.solveTime + 2000;
+        return solve.solveTime;
+    };
+
+    const calculateAverage = (times) => {
+        const validTimes = times.filter(time => time !== Infinity);
+
+        if (validTimes.length < times.length - 1) return 'DNF';
+        if (validTimes.length === 0) return 'DNF';
+
+        const maxTime = Math.max(...validTimes);
+        const minTime = Math.min(...validTimes);
+        const filteredTimes = validTimes.filter(time => time !== maxTime && time !== minTime);
+
+        const avg = filteredTimes.reduce((a, b) => a + b, 0) / filteredTimes.length;
+        return (avg / 1000).toFixed(2); // Convert to seconds and format
+    };
 
     useEffect(() => {
         if (solveHistory.length === 0) {
@@ -20,62 +42,49 @@ function Statistics() {
             setBest12(null);
             setMean(null);
         } else {
-            const times = solveHistory.map(entry => entry.solveTime);
+            const timesWithPenalties = solveHistory.map(solve => getTimeWithPenalties(solve));
 
             // pb
-            const bestSolve = Math.min(...times);
-            setBestSolve((bestSolve / 1000).toFixed(2));
+            const bestSolve = Math.min(...timesWithPenalties);
+            setBestSolve(bestSolve === Infinity ? 'DNF' : (bestSolve / 1000).toFixed(2));
 
             // mean
-            const mean = times.reduce((a, b) => a + b, 0) / times.length;
+            const validTimesForMean = solveHistory.map(solve => (solve.isDNF ? 0 : solve.solveTime)); // днф не впливають
+            const mean = validTimesForMean.reduce((a, b) => a + b, 0) / validTimesForMean.length;
             setMean((mean / 1000).toFixed(2));
 
             // ao5
-            if (times.length >= 5) {
-                const last5 = times.slice(-5);
-                const max5 = Math.max(...last5);
-                const min5 = Math.min(...last5);
-                const filtered5 = last5.filter(time => time !== max5 && time !== min5);
-                const avg5 = filtered5.reduce((a, b) => a + b, 0) / filtered5.length;
-                setAvg5Current((avg5 / 1000).toFixed(2));
+            if (timesWithPenalties.length >= 5) {
+                const last5 = timesWithPenalties.slice(-5);
+                setAvg5Current(calculateAverage(last5));
             }
 
             // ao12
-            if (times.length >= 12) {
-                const last12 = times.slice(-12);
-                const max12 = Math.max(...last12);
-                const min12 = Math.min(...last12);
-                const filtered12 = last12.filter(time => time !== max12 && time !== min12);
-                const avg12 = filtered12.reduce((a, b) => a + b, 0) / filtered12.length;
-                setAvg12Current((avg12 / 1000).toFixed(2));
+            if (timesWithPenalties.length >= 12) {
+                const last12 = timesWithPenalties.slice(-12);
+                setAvg12Current(calculateAverage(last12));
             }
 
             // best5
-            if (times.length >= 5) {
+            if (timesWithPenalties.length >= 5) {
                 let best5 = Infinity;
-                for (let i = 0; i <= times.length - 5; i++) {
-                    const slice5 = times.slice(i, i + 5);
-                    const max5 = Math.max(...slice5);
-                    const min5 = Math.min(...slice5);
-                    const filtered5 = slice5.filter(time => time !== max5 && time !== min5);
-                    const avg5 = filtered5.reduce((a, b) => a + b, 0) / filtered5.length;
-                    if (avg5 < best5) best5 = avg5;
+                for (let i = 0; i <= timesWithPenalties.length - 5; i++) {
+                    const slice5 = timesWithPenalties.slice(i, i + 5);
+                    const avg5 = calculateAverage(slice5);
+                    if (avg5 !== 'DNF' && avg5 < best5) best5 = avg5;
                 }
-                setBest5((best5 / 1000).toFixed(2));
+                setBest5(best5 === Infinity ? 'DNF' : best5);
             }
 
             // best12
-            if (times.length >= 12) {
+            if (timesWithPenalties.length >= 12) {
                 let best12 = Infinity;
-                for (let i = 0; i <= times.length - 12; i++) {
-                    const slice12 = times.slice(i, i + 12);
-                    const max12 = Math.max(...slice12);
-                    const min12 = Math.min(...slice12);
-                    const filtered12 = slice12.filter(time => time !== max12 && time !== min12);
-                    const avg12 = filtered12.reduce((a, b) => a + b, 0) / filtered12.length;
-                    if (avg12 < best12) best12 = avg12;
+                for (let i = 0; i <= timesWithPenalties.length - 12; i++) {
+                    const slice12 = timesWithPenalties.slice(i, i + 12);
+                    const avg12 = calculateAverage(slice12);
+                    if (avg12 !== 'DNF' && avg12 < best12) best12 = avg12;
                 }
-                setBest12((best12 / 1000).toFixed(2));
+                setBest12(best12 === Infinity ? 'DNF' : best12);
             }
         }
     }, [solveHistory]);
